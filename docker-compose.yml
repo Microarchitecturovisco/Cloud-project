@@ -3,11 +3,24 @@ name: cloud-project
 
 services:
 
+  config:
+    build: ./config-server
+    ports:
+      - "8012:8012"
+    networks:
+      - cloud-backend
+    healthcheck:
+      test: "curl --fail --silent localhost:8012/actuator/health | grep UP || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   discovery:
     hostname: discovery
     build: ./discovery
     ports:
       - "8089:8089"
+      - "8761:8761"
     networks:
       - cloud-backend
     healthcheck:
@@ -21,8 +34,8 @@ services:
     depends_on:
       discovery:
         condition: service_healthy
-    ports:
-      - "8090:8090"
+      config:
+        condition: service_healthy
     networks:
       - cloud-backend
 
@@ -31,8 +44,10 @@ services:
     depends_on:
       discovery:
         condition: service_healthy
+      config:
+        condition: service_healthy
     ports:
-      - "8091:8091"
+      - "8869:8869"
     networks:
       - cloud-backend
 
