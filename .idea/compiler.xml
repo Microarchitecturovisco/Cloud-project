@@ -8,13 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="travel-service" />
-        <module name="discovery" />
+        <module name="config-server" />
         <module name="user-service" />
+        <module name="discovery" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="configuration-server" target="22" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="travel-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
