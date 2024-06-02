@@ -18,8 +18,6 @@ services:
     networks:
       - cloud-backend
 
-
-
   travel:
     image: travel
     depends_on:
@@ -27,6 +25,9 @@ services:
       - config
     networks:
       - cloud-backend
+    deploy:
+      replicas: 2
+
 
   user:
     image: user
@@ -37,6 +38,8 @@ services:
       - "8869:8869"
     networks:
       - cloud-backend
+    deploy:
+      replicas: 2
 
 networks:
   cloud-backend:
