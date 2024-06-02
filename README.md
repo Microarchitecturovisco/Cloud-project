@@ -55,6 +55,7 @@ Begin with running the instructions mentioned above (section "Run using Docker")
 
 All the containers will start at the same time.
 However, user and travel services will wait until the discovery service is available and then these application will start.
+Number of replicas for each service can be specified in the _docker-compose-swarm.yml_ file.
 
 4. Check the status of the services:
 ```docker service ls```
