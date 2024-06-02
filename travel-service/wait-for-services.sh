@@ -1,29 +1,31 @@
-#!/bin/sh
-# wait-for-services.sh
+#!/bin/bash
 
-if [ "$#" -lt 3 ]; then
-  echo "Usage: $0 host:port timeout command"
-  exit 1
-fi
+wait_for_service() {
+    local hostport=$1
+    local timeout=$2
 
-hostport="$1"
-timeout="$2"
-shift 2
-cmd="$@"
+    host=$(echo "$hostport" | cut -d':' -f1)
+    port=$(echo "$hostport" | cut -d':' -f2)
 
-host=$(echo "$hostport" | cut -d':' -f1)
-port=$(echo "$hostport" | cut -d':' -f2)
+    end_time=$(( $(date +%s) + timeout ))
 
-end_time=$(( $(date +%s) + timeout ))
+    while [ $(date +%s) -lt $end_time ]; do
+        if nc -z "$host" "$port"; then
+            echo "Service $hostport is available"
+            return 0
+        fi
+        echo "Waiting for $hostport..."
+        sleep 2
+    done
 
-while [ $(date +%s) -lt $end_time ]; do
-  if curl -sSf "$hostport" &> /dev/null; then
-    echo "Service $hostport is available"
-    exec $cmd
-  fi
-  echo "Waiting for $hostport..."
-  sleep 2
-done
+    echo "Timed out waiting for $hostport"
+    return 1
+}
 
-echo "Timed out waiting for $hostport"
-exit 1
+echo "Waiting for services..."
+
+wait_for_service "discovery:8089" 120 || exit 1
+
+wait_for_service "config:8012" 120 || exit 1
+
+echo "All services are available!"

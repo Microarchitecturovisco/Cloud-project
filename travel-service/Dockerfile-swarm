@@ -25,4 +25,4 @@ COPY wait-for-services.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wait-for-services.sh
 
 # Command to run the application using the wait-for-services.sh script
-ENTRYPOINT ["/usr/local/bin/wait-for-services.sh", "discovery:8089", "120", "--", "java", "-jar", "/app/runner.jar"]
+ENTRYPOINT ["/usr/local/bin/wait-for-services.sh", "--", "java", "-jar", "/app/runner.jar"]
