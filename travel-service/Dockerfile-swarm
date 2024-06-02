@@ -1,0 +1,28 @@
+# First stage: build the application
+FROM jelastic/maven:3.9.4-openjdk-22.ea-b17 AS build
+
+ENV HOME=/usr/app
+RUN mkdir -p $HOME
+WORKDIR $HOME
+
+# Add application source code
+ADD . $HOME
+
+# Use Maven to build the application
+RUN --mount=type=cache,target=/root/.m2 mvn clean package -Dmaven.test.skip
+
+# Second stage: create the runtime image
+FROM openjdk:22
+
+# Define argument for JAR file location
+ARG JAR_FILE=/usr/app/target/*.jar
+
+# Copy the built JAR file from the build stage
+COPY --from=build $JAR_FILE /app/runner.jar
+
+# Copy wait-for-services.sh script into the container
+COPY wait-for-services.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/wait-for-services.sh
+
+# Command to run the application using the wait-for-services.sh script
+ENTRYPOINT ["/usr/local/bin/wait-for-services.sh", "discovery:8089", "120", "--", "java", "-jar", "/app/runner.jar"]

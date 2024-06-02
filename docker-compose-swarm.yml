@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+
+  config:
+    image: config
+    ports:
+      - "8012:8012"
+    networks:
+      - cloud-backend
+
+  discovery:
+    image: discovery
+    hostname: discovery
+    ports:
+      - "8089:8089"
+      - "8761:8761"
+    networks:
+      - cloud-backend
+
+
+
+  travel:
+    image: travel
+    depends_on:
+      - discovery
+      - config
+    networks:
+      - cloud-backend
+
+  user:
+    image: user
+    depends_on:
+      - discovery
+      - config
+    ports:
+      - "8869:8869"
+    networks:
+      - cloud-backend
+
+networks:
+  cloud-backend:
