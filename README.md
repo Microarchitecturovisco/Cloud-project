@@ -29,6 +29,16 @@ In the provided docker-compose.yml file set the following environment variables:
       - GITHUB_TOKEN=your_github_token
 ```
 
+Set correct variables in properties files:
+- In config-server:
+```spring.cloud.config.server.git.uri=https://github.com/Microarchitecturovisco/cloud-project-configurations-for-docker.git```
+- - In user-service:
+```spring.config.import=optional:configserver:http://config:8012```
+- In travel-service:
+```spring.config.import=optional:configserver:http://config:8012```
+
+
+
 Then use the following command to build and run the services:
 ```
 docker-compose up -d --build
