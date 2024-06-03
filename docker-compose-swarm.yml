@@ -3,43 +3,42 @@ version: "3.9"
 services:
 
   config:
-    image: config
+    image: config-server-swarm
     ports:
       - "8012:8012"
     networks:
-      - cloud-backend
+      - cloud-backend-swarm
 
   discovery:
-    image: discovery
+    image: discovery-swarm
     hostname: discovery
     ports:
       - "8089:8089"
-      - "8761:8761"
     networks:
-      - cloud-backend
+      - cloud-backend-swarm
 
   travel:
-    image: travel
+    image: travel-swarm
     depends_on:
       - discovery
       - config
     networks:
-      - cloud-backend
+      - cloud-backend-swarm
     deploy:
       replicas: 2
 
 
   user:
-    image: user
+    image: user-swarm
     depends_on:
       - discovery
       - config
     ports:
       - "8869:8869"
     networks:
-      - cloud-backend
+      - cloud-backend-swarm
     deploy:
       replicas: 2
 
 networks:
-  cloud-backend:
+  cloud-backend-swarm:

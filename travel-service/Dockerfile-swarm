@@ -24,5 +24,5 @@ COPY --from=build $JAR_FILE /app/runner.jar
 COPY wait-for-services.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wait-for-services.sh
 
-# Command to run the application using the wait-for-services.sh script
-ENTRYPOINT ["/usr/local/bin/wait-for-services.sh", "--", "java", "-jar", "/app/runner.jar"]
+# Command to run the application using the wait-for-services script
+ENTRYPOINT ["/usr/local/bin/wait-for-services.sh", "120", "discovery:8089/actuator/health", "config:8012/actuator/health", "--", "java", "-jar", "/app/runner.jar"]

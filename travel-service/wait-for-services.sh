@@ -1,31 +1,42 @@
-#!/bin/bash
+#!/bin/sh
 
-wait_for_service() {
-    local hostport=$1
-    local timeout=$2
+if [ "$#" -lt 4 ]; then
+  echo "Usage: $0 timeout host:port/health-endpoint [host:port/health-endpoint ...] command"
+  exit 1
+fi
 
-    host=$(echo "$hostport" | cut -d':' -f1)
-    port=$(echo "$hostport" | cut -d':' -f2)
+timeout="$1"
+shift
 
-    end_time=$(( $(date +%s) + timeout ))
+# Collect host:port pairs with optional health endpoints
+services=()
+while [ "$#" -gt 1 ]; do
+  if [ "$1" = "--" ]; then
+    shift
+    break
+  fi
+  services+=("$1")
+  shift
+done
 
-    while [ $(date +%s) -lt $end_time ]; do
-        if nc -z "$host" "$port"; then
-            echo "Service $hostport is available"
-            return 0
-        fi
-        echo "Waiting for $hostport..."
-        sleep 2
-    done
+cmd="$@"
 
+end_time=$(( $(date +%s) + timeout ))
+
+for hostport in "${services[@]}"; do
+  while [ $(date +%s) -lt $end_time ]; do
+    if curl --fail --silent "http://$hostport" | grep "UP" > /dev/null; then
+      echo "Service $hostport is available"
+      break
+    fi
+    echo "Waiting for $hostport..."
+    sleep 2
+  done
+  if [ $(date +%s) -ge $end_time ]; then
     echo "Timed out waiting for $hostport"
-    return 1
-}
+    exit 1
+  fi
+done
 
-echo "Waiting for services..."
-
-wait_for_service "discovery:8089" 120 || exit 1
-
-wait_for_service "config:8012" 120 || exit 1
-
-echo "All services are available!"
+echo "All services are available, continuing..."
+exec $cmd
