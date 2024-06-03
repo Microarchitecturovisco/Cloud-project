@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery:8089/eureka
+
+
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: travel-service
+          uri: lb://travel-service
+          predicates:
+            - Path=/travel/**
+          filters:
+            - StripPrefix = 1
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix = 1
