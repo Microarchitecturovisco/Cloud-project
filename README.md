@@ -4,7 +4,7 @@
 Configuration server requires your GitHub username as well as GitHub token with access to repositories.
 Generate your token in your profile settings: https://github.com/settings/tokens 
 
-To start the config server, two env variables need to be provided in the _config-server/src/main/resources/.env_ file in order to access the repository:
+To start the config server, create .env file (_config-server/src/main/resources/.env_) and define the following two variables in order to access the repository:
 ```
 GITHUB_USERNAME=your_github_username
 GITHUB_TOKEN=your_github_token
@@ -21,7 +21,7 @@ Order of running the services:
 
 
 ### Run using Docker
-In the provided env file (_config-server\src\main\resources.env_) file set the following environment variables:
+Create an .env file (_config-server\src\main\resources.env_) and set the following environment variables:
 ```
 GITHUB_USERNAME=your_github_username
 GITHUB_TOKEN=your_github_token
