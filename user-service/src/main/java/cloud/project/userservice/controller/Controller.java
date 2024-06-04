@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
 public class Controller {
 
     private final Environment environment;
