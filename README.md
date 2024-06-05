@@ -15,9 +15,10 @@ Make sure to install all dependencies from all pom.xml files.
 
 Order of running the services:
 1. config-server
-2. discovery
-3. user-service
-4. travel-service
+2. discovery 
+3. api-gateway
+4. user-service
+5. travel-service
 
 
 ### Run using Docker
