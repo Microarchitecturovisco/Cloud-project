@@ -29,6 +29,18 @@ services:
       timeout: 5s
       retries: 10
 
+  api-gateway:
+    build: ./api-gateway
+    depends_on:
+      discovery:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+    ports:
+      - "8088:8088"
+    networks:
+      - cloud-backend
+
   travel:
     build: ./travel-service
     depends_on:
