@@ -2,23 +2,35 @@ version: "3.9"
 
 services:
 
-  config:
-    image: config-server-swarm
-    ports:
-      - "8012:8012"
-    networks:
-      - cloud-backend-swarm
+  # config:
+  #   image: cloud-project-config
+  #   ports:
+  #     - "8012:8012"
+  #   networks:
+  #     - cloud-backend-swarm
+  #   env_file:
+  #     - .env
+  #   healthcheck:
+  #     test: "curl --fail --silent localhost:8012/actuator/health | grep UP || exit 1"
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
 
-  discovery:
-    image: discovery-swarm
-    hostname: discovery
-    ports:
-      - "8089:8089"
-    networks:
-      - cloud-backend-swarm
+  # discovery:
+  #   image: cloud-project-discovery
+  #   hostname: discovery
+  #   ports:
+  #     - "8089:8089"
+  #   networks:
+  #     - cloud-backend-swarm
+  #   healthcheck:
+  #     test: "curl --fail --silent localhost:8089/actuator/health | grep UP || exit 1"
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
 
   api-gateway:
-    image: api-gateway-swarm
+    image: cloud-project-api-gateway
     depends_on:
       - discovery
       - config
@@ -30,7 +42,7 @@ services:
       replicas: 1
 
   travel:
-    image: travel-swarm
+    image: cloud-project-travel
     depends_on:
       - discovery
       - config
@@ -40,7 +52,7 @@ services:
       replicas: 2
 
   user:
-    image: user-swarm
+    image: cloud-project-user
     depends_on:
       - discovery
       - config
