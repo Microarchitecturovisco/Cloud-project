@@ -24,8 +24,10 @@ build_image "config-server" "config-server-swarm" "Dockerfile"
 
 build_image "discovery" "discovery-swarm" "Dockerfile"
 
-build_image "user-service" "user-swarm" "Dockerfile-swarm"
+build_image "api-gateway" "api-gateway-swarm" "Dockerfile-swarm"
 
 build_image "travel-service" "travel-swarm" "Dockerfile-swarm"
+
+build_image "user-service" "user-swarm" "Dockerfile-swarm"
 
 echo "Finished building images"
