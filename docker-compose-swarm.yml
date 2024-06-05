@@ -17,6 +17,18 @@ services:
     networks:
       - cloud-backend-swarm
 
+  api-gateway:
+    image: api-gateway-swarm
+    depends_on:
+      - discovery
+      - config
+    ports:
+      - "8088:8088"
+    networks:
+      - cloud-backend-swarm
+    deploy:
+      replicas: 1
+
   travel:
     image: travel-swarm
     depends_on:
@@ -26,7 +38,6 @@ services:
       - cloud-backend-swarm
     deploy:
       replicas: 2
-
 
   user:
     image: user-swarm
