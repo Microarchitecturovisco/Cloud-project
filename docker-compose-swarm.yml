@@ -44,8 +44,8 @@ services:
     depends_on:
       - discovery
       - config
-    ports:
-      - "8869:8869"
+    expose:
+      - "8869"
     networks:
       - cloud-backend-swarm
     deploy:
