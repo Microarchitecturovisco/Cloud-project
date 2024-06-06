@@ -8,6 +8,9 @@ services:
       - "8012:8012"
     networks:
       - cloud-backend-swarm
+    env_file:
+      - .env
+
 
   discovery:
     image: discovery-swarm

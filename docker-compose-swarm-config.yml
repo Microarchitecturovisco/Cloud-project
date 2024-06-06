@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  config:
+    image: cloud-project-config
+    ports:
+      - "8012:8012"
+    networks:
+      - cloud-backend-swarm
+    env_file:
+      - .env
+    healthcheck:
+      test: "curl --fail --silent localhost:8012/actuator/health | grep UP || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  
+  discovery:
+    image: cloud-project-discovery
+    hostname: discovery
+    ports:
+      - "8089:8089"
+    networks:
+      - cloud-backend-swarm
+    healthcheck:
+      test: "curl --fail --silent localhost:8089/actuator/health | grep UP || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+networks:
+  cloud-backend-swarm:
